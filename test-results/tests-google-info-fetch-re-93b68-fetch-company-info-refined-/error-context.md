@@ -1,0 +1,57 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - separator [ref=e3]
+    - iframe [ref=e8]:
+      - generic [ref=f2e2]:
+        - generic [ref=f2e3]:
+          - checkbox "I'm not a robot" [ref=f2e7]
+          - generic [ref=f2e10]: I'm not a robot
+        - generic [ref=f2e11]:
+          - generic [ref=f2e14]: reCAPTCHA
+          - generic [ref=f2e15]:
+            - link "Privacy" [ref=f2e16] [cursor=pointer]:
+              - /url: https://www.google.com/intl/en/policies/privacy/
+            - text: "-"
+            - link "Terms" [ref=f2e17] [cursor=pointer]:
+              - /url: https://www.google.com/intl/en/policies/terms/
+    - separator [ref=e9]
+    - generic [ref=e10]:
+      - text: About this page
+      - text: Our systems have detected unusual traffic from your computer network. This page checks to see if it's really you sending the requests, and not a robot.
+      - link "Why did this happen?" [ref=e11] [cursor=pointer]:
+        - /url: "#"
+      - generic [ref=e12]:
+        - text: "IP address: 2001:fd8:b415:3aa3:dc11:9f5c:a10a:5175"
+        - text: "Time: 2026-01-22T15:14:50Z"
+        - text: "URL: https://www.google.com/search?q=site:zoominfo.com+facebook.com&sei=6T5yafqkO_io2roPtfjb8AY"
+  - iframe [active] [ref=e16]:
+    - dialog [ref=f5e3]:
+      - generic [ref=f5e4]:
+        - generic [ref=f5e7]:
+          - text: Select all images with
+          - strong [ref=f5e8]: crosswalks
+          - generic [ref=f5e9]: Click verify once there are none left.
+        - table [ref=f5e12]:
+          - rowgroup [ref=f5e13]:
+            - row [ref=f5e14]:
+              - button [ref=f5e15]
+              - button [ref=f5e18]
+              - button [ref=f5e23]
+            - row [ref=f5e26]:
+              - button [ref=f5e27]
+              - button [ref=f5e30]
+              - button [ref=f5e33]
+            - row [ref=f5e36]:
+              - button [active] [ref=f5e37]
+              - button [ref=f5e42]
+              - button [ref=f5e46]
+      - generic [ref=f5e52]:
+        - generic [ref=f5e53]:
+          - button "Get a new challenge" [ref=f5e55] [cursor=pointer]
+          - button "Get an audio challenge" [ref=f5e57] [cursor=pointer]
+          - button "Help" [ref=f5e59] [cursor=pointer]
+        - button "Verify" [ref=f5e61] [cursor=pointer]
+```
