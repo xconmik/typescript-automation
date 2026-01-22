@@ -1,6 +1,6 @@
 import { Sidebar } from "@/app/components/sidebar";
 import { Header } from "@/app/components/header";
-import { Dashboard } from "@/app/components/dashboard";
+import Dashboard from "@/app/components/dashboard";
 import { AutomationRules } from "@/app/components/automation-rules";
 import { CSVUpload } from "@/app/components/csv-upload";
 import { LeadEnrichment } from "@/app/components/lead-enrichment";

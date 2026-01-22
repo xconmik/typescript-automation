@@ -5,16 +5,7 @@ import { useEffect, useState, useCallback } from 'react';
 import AddHistoryLog from './add-history-log';
 import { Info, UserCog, Zap, Rocket, ShieldCheck, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 
-interface HistoryLog {
-  id: string;
-  company_name: string;
-  domain: string;
-  agent: string;
-  disposition: string;
-  remarks: string;
-  headquarters: string;
-  created_at: string;
-}
+import type { HistoryLog } from "../../types/history-log";
 
 const dispositionColor = (value: string) => {
   switch (value) {

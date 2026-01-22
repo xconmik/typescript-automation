@@ -1,3 +1,13 @@
+const { exec } = require('child_process');
+// POST /api/automation
+app.post('/api/automation', (req, res) => {
+  exec('npx playwright test playwright-log-example.ts', (error, stdout, stderr) => {
+    if (error) {
+      return res.status(500).json({ error: 'Automation failed', details: stderr });
+    }
+    res.json({ message: 'Automation started', output: stdout });
+  });
+});
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';

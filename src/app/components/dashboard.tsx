@@ -1,9 +1,38 @@
 import { TrendingUp, Users, CheckCircle2, XCircle, Play } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
+import type { HistoryLog } from "../../types/history-log";
 
-export function Dashboard() {
-  const [logs, setLogs] = useState([]);
+function RunAutomationButton() {
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+
+  const handleRun = async () => {
+    setLoading(true);
+    setResult(null);
+    try {
+      const res = await fetch('/api/automation', { method: 'POST' });
+      const data = await res.json();
+      setResult(data.message || data.error);
+    } catch (err) {
+      setResult('Error running automation');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="mb-8">
+      <button onClick={handleRun} disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded">
+        {loading ? 'Running...' : 'Run Playwright Automation'}
+      </button>
+      {result && <div className="mt-2 text-sm text-gray-700">{result}</div>}
+    </div>
+  );
+}
+
+
+export default function Dashboard() {
+  const [logs, setLogs] = useState<HistoryLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -82,6 +111,9 @@ export function Dashboard() {
           Monitor your lead enrichment performance and activity
         </p>
       </div>
+
+      {/* Automation Button */}
+      <RunAutomationButton />
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -10,8 +10,8 @@ if (!MONGODB_URI) {
 export default async function dbConnect() {
   if (mongoose.connection.readyState >= 1) return;
   try {
-    await mongoose.connect(MONGODB_URI);
-    console.log('MongoDB connected:', MONGODB_URI.replace(/:\/\/.*@/, '://[credentials]@'));
+    await mongoose.connect(MONGODB_URI!);
+    console.log('MongoDB connected:', MONGODB_URI!.replace(/:\/\/.*@/, '://[credentials]@'));
   } catch (error) {
     console.error('MongoDB connection error:', error);
     throw new Error('Failed to connect to MongoDB. Check your MONGODB_URI and MongoDB server.');
