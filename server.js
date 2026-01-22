@@ -82,6 +82,21 @@ app.get('/api/enrichments', async (req, res) => {
 });
 
 // GET /api/contacts
+
+// GET /api/settings (mock data)
+app.get('/api/settings', (req, res) => {
+  res.json({
+    companyName: "Acme Corporation",
+    timezone: "america-los-angeles",
+    searchDelay: "2000",
+    retryAttempts: "3",
+    proxyEnabled: false,
+    zoomInfoConnected: true,
+    rocketReachConnected: true,
+    buildataConnected: false,
+  });
+});
+
 app.get('/api/contacts', async (req, res) => {
   try {
     // Example: return empty array or mock data

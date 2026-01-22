@@ -29,13 +29,39 @@ export function Settings() {
   const [rocketReachConnected, setRocketReachConnected] = useState(true);
   const [buildataConnected, setBuildataConnected] = useState(false);
 
+
   useEffect(() => {
     fetch('/api/settings')
-      .then((res) => res.json())
-      .then(setData);
+      .then((res) => {
+        if (!res.ok) throw new Error('No backend');
+        return res.json();
+      })
+      .then(setData)
+      .catch(() => {
+        // Mock data if backend is missing
+        setData({
+          companyName: "Acme Corporation",
+          timezone: "america-los-angeles",
+          searchDelay: "2000",
+          retryAttempts: "3",
+          proxyEnabled: false,
+          zoomInfoConnected: true,
+          rocketReachConnected: true,
+          buildataConnected: false,
+          user_roles: [
+            { email: "john@company.com", role: "Owner" },
+            { email: "jane@company.com", role: "Admin" },
+            { email: "alex@company.com", role: "Member" },
+          ],
+        });
+      });
   }, []);
 
+
   if (!data) return <div>Loading...</div>;
+
+  // Defensive fallback for user_roles
+  const userRoles = data.user_roles || [];
 
   return (
     <div className="max-w-5xl">
@@ -117,7 +143,7 @@ export function Settings() {
               <div className="pt-4 border-t border-gray-200">
                 <h3 className="font-medium text-gray-900 mb-4">User Roles</h3>
                 <div className="space-y-3">
-                  {data.user_roles.map((u: any, i: number) => (
+                  {userRoles.map((u: any, i: number) => (
                     <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="text-sm font-medium text-gray-900">
