@@ -1,0 +1,73 @@
+import multer from 'multer';
+import path from 'path';
+import { exec } from 'child_process';
+// Multer setup for file uploads
+const upload = multer({ dest: 'uploads/' });
+// CSV upload endpoint
+app.post('/api/upload-csv', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+  const destPath = path.join(__dirname, 'TypeScriptPlaywrightProject', 'leads.csv');
+  const fs = (await import('fs')).default;
+  fs.rename(req.file.path, destPath, (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to save file' });
+    }
+    // Optionally trigger Playwright automation
+    exec('npm run start', { cwd: path.join(__dirname, 'TypeScriptPlaywrightProject') }, (error, stdout, stderr) => {
+      if (error) {
+        return res.status(500).json({ error: 'Automation failed', details: stderr });
+      }
+      res.json({ message: 'File uploaded and automation started', output: stdout });
+    });
+  });
+});
+
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import HistoryLog from './models/HistoryLog.js';
+
+// Load environment variables
+dotenv.config();
+
+const app = express();
+app.use(cors());
+const PORT = process.env.PORT || 3001;
+const MONGODB_URI = process.env.MONGODB_URI;
+
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
+
+// GET /api/history
+app.get('/api/history', async (req, res) => {
+  try {
+    const logs = await HistoryLog.find().sort({ created_at: -1 }).limit(1000);
+    res.json(logs);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch history logs' });
+  }
+});
+
+// POST /api/history
+app.post('/api/history', async (req, res) => {
+  try {
+    const log = await HistoryLog.create(req.body);
+    res.status(201).json(log);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create history log' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend API server running on http://localhost:${PORT}`);
+});

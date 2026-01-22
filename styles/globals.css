@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;700&display=swap');
+
+body {
+  font-family: 'Inter', 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #18181b 0%, #23232a 100%);
+  color: #e0e0e0;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 0 16px 0 #00eaff, 0 0 32px 0 #ff00ea;
+  background: #23232a;
+  padding: 1.5rem;
+}
+
+.neon-cyan {
+  color: #00eaff;
+}
+.neon-magenta {
+  color: #ff00ea;
+}
+.font-poppins {
+  font-family: 'Poppins', 'Inter', sans-serif;
+}
