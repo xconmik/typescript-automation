@@ -26,8 +26,11 @@ export function LeadEnrichment() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:8000/api/enrichments")
-      .then((res) => res.json())
+    fetch("/api/enrichments")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load enrichment data.");
+        return res.json();
+      })
       .then(setData)
       .catch(() => setError("Failed to load enrichment data."))
       .finally(() => setLoading(false));

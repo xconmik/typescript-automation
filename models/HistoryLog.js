@@ -17,4 +17,4 @@ HistoryLogSchema.index({ company_name: 1 });
 HistoryLogSchema.index({ disposition: 1 });
 HistoryLogSchema.index({ created_at: -1 });
 
-export default model('HistoryLog', HistoryLogSchema);
+export default model('HistoryLog', HistoryLogSchema, 'historylogs');

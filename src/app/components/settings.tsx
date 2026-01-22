@@ -30,7 +30,7 @@ export function Settings() {
   const [buildataConnected, setBuildataConnected] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/settings")
+    fetch('/api/settings')
       .then((res) => res.json())
       .then(setData);
   }, []);

@@ -168,7 +168,7 @@ export function CSVUpload() {
     setUploadState("uploading");
     setErrorMessage("");
     try {
-      const res = await fetch("http://localhost:3001/api/upload-csv", {
+      const res = await fetch('/api/upload-csv', {
         method: "POST",
         body: formData,
       });

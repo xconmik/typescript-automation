@@ -23,7 +23,7 @@ export function Campaigns() {
   const [data, setData] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/campaigns")
+    fetch("/api/campaigns")
       .then((res) => res.json())
       .then(setData);
   }, []);

@@ -53,7 +53,7 @@ export default function HistoryPage() {
   const fetchHistory = useCallback(() => {
     setLoading(true);
     setError(null);
-    fetch('http://localhost:3001/api/history')
+    fetch('/api/history')
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch history');
         return res.json();

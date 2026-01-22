@@ -23,7 +23,7 @@ export function Contacts() {
   const [sourceFilter, setSourceFilter] = useState("all");
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/contacts")
+    fetch("/api/contacts")
       .then((res) => res.json())
       .then(setData);
   }, []);

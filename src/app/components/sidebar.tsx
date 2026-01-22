@@ -46,20 +46,16 @@ export function Sidebar({ currentPage, onNavigate }: SidebarProps) {
           const Icon = item.icon;
           const isActive = currentPage === item.id;
           return (
-            <button
-              key={item.label}
-              onClick={() => onNavigate(item.id)}
-              className={`
-                w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors
-                ${isActive 
-                  ? 'bg-indigo-50 text-indigo-700' 
-                  : 'text-gray-700 hover:bg-gray-50'
-                }
-              `}
-            >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium text-sm">{item.label}</span>
-            </button>
+              <li
+                key={item.label}
+                onClick={() => onNavigate(item.id)}
+                className={`flex items-center gap-3 px-6 py-3 cursor-pointer transition-colors duration-150
+                  ${isActive ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-100'}
+                  rounded-lg mb-1`}
+              >
+                <Icon className={`w-5 h-5 ${isActive ? 'text-indigo-600' : 'text-gray-400'}`} />
+                <span className="font-medium text-sm">{item.label}</span>
+              </li>
           );
         })}
       </nav>

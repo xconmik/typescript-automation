@@ -2,81 +2,76 @@ import { TrendingUp, Users, CheckCircle2, XCircle, Play } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
 
-const metricsData = [
-  {
-    title: "Total Leads Imported",
-    value: "12,543",
-    change: "+12.5%",
-    trend: "up",
-    icon: Users,
-  },
-  {
-    title: "Enriched Leads",
-    value: "10,892",
-    change: "+8.3%",
-    trend: "up",
-    icon: CheckCircle2,
-  },
-  {
-    title: "Failed Enrichments",
-    value: "342",
-    change: "-5.2%",
-    trend: "down",
-    icon: XCircle,
-  },
-  {
-    title: "Active Campaigns",
-    value: "18",
-    change: "+3",
-    trend: "up",
-    icon: Play,
-  },
-];
-
-const enrichmentTimeData = [
-  { date: "Jan 15", count: 320 },
-  { date: "Jan 16", count: 450 },
-  { date: "Jan 17", count: 380 },
-  { date: "Jan 18", count: 520 },
-  { date: "Jan 19", count: 490 },
-  { date: "Jan 20", count: 610 },
-  { date: "Jan 21", count: 580 },
-];
-
-const successFailData = [
-  { source: "ZoomInfo", success: 4200, failed: 180 },
-  { source: "RocketReach", success: 3800, failed: 220 },
-  { source: "Buildata", success: 2900, failed: 150 },
-];
-
-const recentActivity = [
-  { domain: "stripe.com", status: "Success", source: "ZoomInfo", timestamp: "2 min ago" },
-  { domain: "figma.com", status: "Success", source: "RocketReach", timestamp: "5 min ago" },
-  { domain: "acme-corp.com", status: "Failed", source: "ZoomInfo", timestamp: "8 min ago" },
-  { domain: "techstart.io", status: "Success", source: "Buildata", timestamp: "12 min ago" },
-  { domain: "salesforce.com", status: "Success", source: "ZoomInfo", timestamp: "15 min ago" },
-  { domain: "hubspot.com", status: "Success", source: "RocketReach", timestamp: "18 min ago" },
-  { domain: "startup-xyz.com", status: "Failed", source: "ZoomInfo", timestamp: "22 min ago" },
-  { domain: "shopify.com", status: "Success", source: "Buildata", timestamp: "25 min ago" },
-];
-
 export function Dashboard() {
-  const [message, setMessage] = useState("");
-  const [data, setData] = useState<any>(null);
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/dashboard")
-      .then(res => res.json())
-      .then(setData);
+    fetch("/api/history")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch history logs");
+        return res.json();
+      })
+      .then((data) => {
+        setLogs(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
 
-  useEffect(() => {
-    fetch("http://localhost:8000/api/hello")
-      .then(res => res.json())
-      .then(data => setMessage(data.message));
-  }, []);
+  // Example metrics based on logs
+  const totalLeads = logs.length;
+  const enrichedLeads = logs.filter(l => l.disposition === "Enriched").length;
+  const failedEnrichments = logs.filter(l => l.disposition === "Failed").length;
+  const activeCampaigns = 18; // Placeholder
 
-  if (!data) return <div>Loading...</div>;
+  const metricsData = [
+    {
+      title: "Total Leads Imported",
+      value: totalLeads,
+      change: "+0%",
+      trend: "up",
+      icon: Users,
+    },
+    {
+      title: "Enriched Leads",
+      value: enrichedLeads,
+      change: "+0%",
+      trend: "up",
+      icon: CheckCircle2,
+    },
+    {
+      title: "Failed Enrichments",
+      value: failedEnrichments,
+      change: "-0%",
+      trend: "down",
+      icon: XCircle,
+    },
+    {
+      title: "Active Campaigns",
+      value: activeCampaigns,
+      change: "+0",
+      trend: "up",
+      icon: Play,
+    },
+  ];
+
+  // Example chart data
+  const enrichmentTimeData = logs.slice(0, 7).map((log, idx) => ({
+    date: new Date(log.created_at).toLocaleDateString(),
+    count: idx + 1,
+  }));
+
+  const successFailData = [
+    { source: "Enriched", success: enrichedLeads, failed: failedEnrichments },
+  ];
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="max-w-7xl">
@@ -184,65 +179,6 @@ export function Dashboard() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
-
-      {/* Recent Activity Table */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-gray-900">Recent Activity</h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Domain
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Source
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                  Timestamp
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {recentActivity.map((activity, idx) => (
-                <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-medium text-gray-900">
-                      {activity.domain}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        activity.status === "Success"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {activity.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {activity.source}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {activity.timestamp}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div>
-        <h2>Dashboard</h2>
-        <p>Backend says: {message}</p>
       </div>
     </div>
   );

@@ -1,8 +1,24 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
 import multer from 'multer';
 import path from 'path';
 import { exec } from 'child_process';
+import HistoryLog from './models/HistoryLog.js';
+
+// Load environment variables
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+const PORT = process.env.PORT || 3001;
+const MONGODB_URI = process.env.MONGODB_URI;
+
 // Multer setup for file uploads
 const upload = multer({ dest: 'uploads/' });
+
 // CSV upload endpoint
 app.post('/api/upload-csv', upload.single('file'), async (req, res) => {
   if (!req.file) {
@@ -23,20 +39,6 @@ app.post('/api/upload-csv', upload.single('file'), async (req, res) => {
     });
   });
 });
-
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import HistoryLog from './models/HistoryLog.js';
-
-// Load environment variables
-dotenv.config();
-
-const app = express();
-app.use(cors());
-const PORT = process.env.PORT || 3001;
-const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(express.json());
 
@@ -65,6 +67,37 @@ app.post('/api/history', async (req, res) => {
     res.status(201).json(log);
   } catch (err) {
     res.status(500).json({ error: 'Failed to create history log' });
+  }
+});
+
+// GET /api/enrichments
+app.get('/api/enrichments', async (req, res) => {
+  try {
+    // Example: return all history logs as enrichment data
+    const enrichments = await HistoryLog.find().sort({ created_at: -1 }).limit(1000);
+    res.json(enrichments);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch enrichment data' });
+  }
+});
+
+// GET /api/contacts
+app.get('/api/contacts', async (req, res) => {
+  try {
+    // Example: return empty array or mock data
+    res.json([]);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch contacts' });
+  }
+});
+
+// GET /api/campaigns
+app.get('/api/campaigns', async (req, res) => {
+  try {
+    // Example: return empty array or mock data
+    res.json([]);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch campaigns' });
   }
 });
 
